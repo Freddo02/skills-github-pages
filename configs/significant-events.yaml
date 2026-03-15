@@ -1,0 +1,45 @@
+version: 1
+project: king-ai-empire
+
+event_thresholds:
+  significance_trigger: 0.52
+  realtime_hold_seconds: 14
+  timelapse_speed: 8
+
+weights:
+  dps_spike: 0.24
+  tech_unlock: 0.18
+  streak_kill: 0.15
+  base_hp_drop: 0.23
+  frontline_shift: 0.12
+  underdog_comeback: 0.08
+
+rules:
+  - id: first_tech_unlock
+    when: "team.tech_tier increases and team.tech_tier == 1"
+    score_boost: 0.30
+    label: "FIRST TECH ONLINE"
+
+  - id: major_base_damage
+    when: "base.hp_delta_percent_10s <= -8"
+    score_boost: 0.35
+    label: "BASE UNDER HEAVY FIRE"
+
+  - id: elimination_streak
+    when: "team.kill_streak_15s >= 5"
+    score_boost: 0.22
+    label: "ELIMINATION STREAK"
+
+  - id: frontline_break
+    when: "frontline.delta_meters_20s >= 35"
+    score_boost: 0.20
+    label: "FRONTLINE COLLAPSE"
+
+clip_policy:
+  pre_roll_seconds: 10
+  post_roll_seconds: 12
+  min_clip_seconds: 12
+  max_clip_seconds: 45
+  formats:
+    - "16:9"
+    - "9:16"
